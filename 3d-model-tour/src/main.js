@@ -111,7 +111,7 @@ class HotspotManager {
             preserveDrawingBuffer: false
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(1);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -873,7 +873,7 @@ class HotspotManager {
             const material = new THREE.MeshBasicMaterial({ visible: false });
             const hotspotMesh = new THREE.Mesh(geometry, material);
             hotspotMesh.position.copy(worldPosition);
-            this.scene.add(hotspotMesh);
+            //this.scene.add(hotspotMesh);
 
             const hotspot = {
                 element: hotspotDiv,

@@ -14,5 +14,8 @@
   "dependencies": {
     "postprocessing": "^6.37.6",
     "three": "^0.167.1"
-  }
+  },
+  "engines": {
+  "node": "18.18.2"
+}
 }

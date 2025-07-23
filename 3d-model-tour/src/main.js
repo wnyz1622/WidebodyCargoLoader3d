@@ -9,6 +9,12 @@ import { WebGLRenderer } from "three";
 import { EffectComposer, RenderPass, EffectPass, OutlineEffect, BlendFunction, SMAAEffect } from 'postprocessing';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 
+function isMobile() {
+    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+const IS_MOBILE = isMobile();
+
 class HotspotManager {
     constructor() {
         this.init();
@@ -156,41 +162,43 @@ class HotspotManager {
         directionalLight.shadow.normalBias = 0.02;
         this.scene.add(directionalLight);
         //composer
-        this.composer = new EffectComposer(this.renderer);
-        this.composer.addPass(new RenderPass(this.scene, this.camera));
-        // Postprocessing passes
+        // Setup composer only if not mobile
+        if (!IS_MOBILE) {
+            this.composer = new EffectComposer(this.renderer);
+            this.composer.addPass(new RenderPass(this.scene, this.camera));
+            // Postprocessing passes
 
-        // Create OutlineEffect
-        this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
-            selection: [],
-            blendFunction: BlendFunction.ALPHA,
-            edgeStrength: 2,
-            pulseSpeed: 0.0,
-            visibleEdgeColor: new THREE.Color('#ef5337'), // Start transparent
-            hiddenEdgeColor: new THREE.Color('#ef5337'),
-            multisampling: 4,
-            // resolution: {
-            //     // width: window.innerWidth * Math.min(window.devicePixelRatio, 2),
-            //     // height: window.innerHeight * Math.min(window.devicePixelRatio, 2)
-            // },
-            resolution: { width: window.innerWidth / 2, height: window.innerHeight / 2 },
-            xRay: false,
-            // Edge detection settings
-            patternTexture: null,
-            kernelSize: 1,
-            blur: false,
-            edgeGlow: 0.0,
-            usePatternTexture: false
-        });
-        //SMAA
-        const smaaEffect = new SMAAEffect();
-        // Create effect pass with both outline and SMAA
-        const effectPass = new EffectPass(this.camera, this.outlineEffect, smaaEffect);
-        effectPass.renderToScreen = true;
+            // Create OutlineEffect
+            this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
+                selection: [],
+                blendFunction: BlendFunction.ALPHA,
+                edgeStrength: 2,
+                pulseSpeed: 0.0,
+                visibleEdgeColor: new THREE.Color('#ef5337'), // Start transparent
+                hiddenEdgeColor: new THREE.Color('#ef5337'),
+                multisampling: 4,
+                // resolution: {
+                //     // width: window.innerWidth * Math.min(window.devicePixelRatio, 2),
+                //     // height: window.innerHeight * Math.min(window.devicePixelRatio, 2)
+                // },
+                resolution: { width: window.innerWidth / 2, height: window.innerHeight / 2 },
+                xRay: false,
+                // Edge detection settings
+                patternTexture: null,
+                kernelSize: 1,
+                blur: false,
+                edgeGlow: 0.0,
+                usePatternTexture: false
+            });
+            //SMAA
+            const smaaEffect = new SMAAEffect();
+            // Create effect pass with both outline and SMAA
+            const effectPass = new EffectPass(this.camera, this.outlineEffect, smaaEffect);
+            effectPass.renderToScreen = true;
 
-        //add effect pass to composer
-        this.composer.addPass(effectPass);
-
+            //add effect pass to composer
+            this.composer.addPass(effectPass);
+        }
         // Add floor disc
         const floorGeometry = new THREE.CircleGeometry(5, 48);
         const floorMaterial = new THREE.MeshStandardMaterial({
@@ -1333,6 +1341,11 @@ class HotspotManager {
         if (this.mixer) {
             const delta = this.clock.getDelta();
             this.mixer.update(delta);
+        }
+        if (IS_MOBILE || !this.composer) {
+            this.renderer.render(this.scene, this.camera);
+        } else {
+            this.composer.render();
         }
         this.stats.update();
     }

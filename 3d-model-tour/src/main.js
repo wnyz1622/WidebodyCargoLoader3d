@@ -464,7 +464,7 @@ class HotspotManager {
                     });
                     console.log('============================');
 
-                    this.scene.add(this.model);
+                    //this.scene.add(this.model);
 
                     // Set texture filtering for all textures in model materials
                     this.model.traverse((node) => {
@@ -873,7 +873,7 @@ class HotspotManager {
             const material = new THREE.MeshBasicMaterial({ visible: false });
             const hotspotMesh = new THREE.Mesh(geometry, material);
             hotspotMesh.position.copy(worldPosition);
-            //this.scene.add(hotspotMesh);
+            this.scene.add(hotspotMesh);
 
             const hotspot = {
                 element: hotspotDiv,

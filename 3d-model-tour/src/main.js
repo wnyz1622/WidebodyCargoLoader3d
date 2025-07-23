@@ -8,7 +8,12 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { WebGLRenderer } from "three";
 import { EffectComposer, RenderPass, EffectPass, OutlineEffect, BlendFunction, SMAAEffect } from 'postprocessing';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { WEBGL } from 'three/examples/jsm/WebGL.js';
 
+if (!WEBGL.isWebGLAvailable()) {
+  alert('WebGL is not supported on this device.');
+  return;
+}
 function isMobile() {
     return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
@@ -108,14 +113,14 @@ class HotspotManager {
             stencil: false,
             depth: true,
             alpha: false,
-            preserveDrawingBuffer: false
+            //preserveDrawingBuffer: false
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        document.getElementById('container').appendChild(this.renderer.domElement);
+        //document.getElementById('container').appendChild(this.renderer.domElement);
 
         // Add WebGL context loss handler
         this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
@@ -464,7 +469,7 @@ class HotspotManager {
                     });
                     console.log('============================');
 
-                    //this.scene.add(this.model);
+                    this.scene.add(this.model);
 
                     // Set texture filtering for all textures in model materials
                     this.model.traverse((node) => {
@@ -1166,7 +1171,8 @@ class HotspotManager {
 
         const pixelRatio = Math.min(window.devicePixelRatio, 2);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(pixelRatio);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // or just 1.0 for testing
+
 
         // Update composer
         this.composer.setSize(window.innerWidth, window.innerHeight);

@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  root: '3d-model-tour',
+  root: '.', 
   build: {
-    outDir: '../dist',
+    outDir: 'dist',       
     emptyOutDir: true
   }
 });

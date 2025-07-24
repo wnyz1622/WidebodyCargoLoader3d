@@ -108,7 +108,7 @@ class HotspotManager {
             stencil: false,
             depth: true,
             alpha: false,
-           //preserveDrawingBuffer: false
+            //preserveDrawingBuffer: false
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
@@ -261,7 +261,7 @@ class HotspotManager {
                         <div class="loading-content">
                             <h2>Error Loading Model</h2>
                             <p>${error.message}</p>
-                            <p>Please ensure the model file 'scene.glb' is in the correct location.</p>
+                            <p>Please ensure the model file is in the correct location.</p>
                         </div>
                     `;
         }
@@ -303,18 +303,20 @@ class HotspotManager {
     setupLoaders() {
         // Setup DRACO loader
         this.dracoLoader = new DRACOLoader();
-        this.dracoLoader.setDecoderPath('./libs/draco/'); 
-        this.dracoLoader.preload(); // <--- Preload Draco decoder
+        this.dracoLoader.setDecoderPath('/lib/draco/');
+        this.dracoLoader.preload();
 
-        // Setup GLTF loader
-        this.loader = new GLTFLoader();
+        // Setup GLTF loader with loading manager
+        const loadingManager = new THREE.LoadingManager();
+        this.loader = new GLTFLoader(loadingManager);
         this.loader.setDRACOLoader(this.dracoLoader);
+        this.loadingManager = loadingManager;
     }
 
     async loadModel() {
         return new Promise((resolve, reject) => {
-            // Create loading manager first
-            const loadingManager = new THREE.LoadingManager();
+            // Reuse loading manager
+            const loadingManager = this.loadingManager;
 
             // Setup loading manager callbacks
             loadingManager.onProgress = (url, loaded, total) => {
@@ -337,17 +339,16 @@ class HotspotManager {
                 reject(new Error(`Failed to load: ${url}`));
             };
 
-            // Create a new GLTFLoader with the loading manager
-            this.loader = new GLTFLoader(loadingManager);
-
-            // Setup DRACO decoder
-            const dracoLoader = new DRACOLoader();
-            dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-            this.loader.setDRACOLoader(dracoLoader);
 
             const modelPath = 'media/model/AxelJack_v3.glb';
             console.log('Loading model from:', modelPath);
 
+            // this.loader.load(modelPath, (gltf) => {
+            //     console.log('Model loaded!');
+            //     scene.add(gltf.scene);
+            // }, undefined, (err) => {
+            //     console.error('Failed to load model:', err);
+            // });
             this.loader.load(
                 modelPath,
                 (gltf) => {
@@ -1338,7 +1339,11 @@ class HotspotManager {
             this.controlsChanged = false;
         }
         //this.renderer.render(this.scene, this.camera);
-        this.composer.render();
+        if (this.composer) {
+            this.composer.render();
+        } else {
+            this.renderer.render(this.scene, this.camera);
+        }
         if (this.mixer) {
             const delta = this.clock.getDelta();
             this.mixer.update(delta);

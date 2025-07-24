@@ -303,7 +303,7 @@ class HotspotManager {
     setupLoaders() {
         // Setup DRACO loader
         this.dracoLoader = new DRACOLoader();
-        this.dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+        this.dracoLoader.setDecoderPath('./libs/draco/'); 
         this.dracoLoader.preload(); // <--- Preload Draco decoder
 
         // Setup GLTF loader

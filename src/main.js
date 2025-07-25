@@ -14,7 +14,15 @@ function isMobile() {
 }
 
 const IS_MOBILE = isMobile();
+window.addEventListener('error', (e) => {
+    console.error('💥 CRASH DETECTED:', e.message);
+    alert('CRASH: ' + e.message + ' at line ' + e.lineno);
+});
 
+window.addEventListener('unhandledrejection', (e) => {
+    console.error('💥 PROMISE CRASH:', e.reason);
+    alert('PROMISE ERROR: ' + e.reason);
+});
 class HotspotManager {
     constructor() {
         this.init();
@@ -116,11 +124,8 @@ class HotspotManager {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.getElementById('container').appendChild(this.renderer.domElement);
-        if (IS_MOBILE) {
-            this.renderer.shadowMap.enabled = false;
-            this.renderer.shadowMap.enabled = false;
-            this.renderer.toneMapping = THREE.NoToneMapping;
-        }
+          
+        
 
         // Add WebGL context loss handler
         this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
@@ -131,20 +136,15 @@ class HotspotManager {
         // Add right-center SVG arrow
         const rightArrow = document.createElement('img');
         rightArrow.src = 'media/MouseControl.svg'; // adjust path if needed
-        rightArrow.alt = 'Next';
-        rightArrow.id = 'right-center-arrow';
+        rightArrow.id = 'mouse-control';
         document.body.appendChild(rightArrow);
-        // Touch support for right arrow
-        rightArrow.addEventListener('touchstart', (e) => {
-            rightArrow.click();
-        });
-
+        
         // 🔆 Enable tone mapping and adjust exposure
         this.renderer.toneMapping = THREE.LinearToneMapping; // or THREE.ReinhardToneMapping
         this.renderer.toneMappingExposure = 0.95; // adjust brightness here (try 1.2–2.0)
         this.renderer.outputEncoding = THREE.sRGBEncoding;
-        this.renderer.toneMapping = IS_MOBILE ? THREE.NoToneMapping : THREE.LinearToneMapping;
-        this.renderer.toneMappingExposure = IS_MOBILE ? 1 : 0.95;
+        this.renderer.toneMapping = THREE.LinearToneMapping;
+        
 
         // Add lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
@@ -170,42 +170,42 @@ class HotspotManager {
         this.scene.add(directionalLight);
         //composer
         // Setup composer only if not mobile
-        if (!IS_MOBILE) {
-            this.composer = new EffectComposer(this.renderer);
-            this.composer.addPass(new RenderPass(this.scene, this.camera));
-            // Postprocessing passes
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.addPass(new RenderPass(this.scene, this.camera));
+        // Postprocessing passes
 
-            // Create OutlineEffect
-            this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
-                selection: [],
-                blendFunction: BlendFunction.ALPHA,
-                edgeStrength: 2,
-                pulseSpeed: 0.0,
-                visibleEdgeColor: new THREE.Color('#ef5337'), // Start transparent
-                hiddenEdgeColor: new THREE.Color('#ef5337'),
-                multisampling: 4,
-                // resolution: {
-                //     // width: window.innerWidth * Math.min(window.devicePixelRatio, 2),
-                //     // height: window.innerHeight * Math.min(window.devicePixelRatio, 2)
-                // },
-                resolution: { width: window.innerWidth / 2, height: window.innerHeight / 2 },
-                xRay: false,
-                // Edge detection settings
-                patternTexture: null,
-                kernelSize: 1,
-                blur: false,
-                edgeGlow: 0.0,
-                usePatternTexture: false
-            });
-            //SMAA
-            const smaaEffect = new SMAAEffect();
-            // Create effect pass with both outline and SMAA
-            const effectPass = new EffectPass(this.camera, this.outlineEffect, smaaEffect);
-            effectPass.renderToScreen = true;
+        // Create OutlineEffect
+        this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
+            selection: [],
+            blendFunction: BlendFunction.ALPHA,
+            edgeStrength: 2,
+            pulseSpeed: 0.0,
+            visibleEdgeColor: new THREE.Color('#ef5337'), // Start transparent
+            hiddenEdgeColor: new THREE.Color('#ef5337'),
+            multisampling: 4,
+            // resolution: {
+            //     // width: window.innerWidth * Math.min(window.devicePixelRatio, 2),
+            //     // height: window.innerHeight * Math.min(window.devicePixelRatio, 2)
+            // },
+            resolution: { width: window.innerWidth / 2, height: window.innerHeight / 2 },
+            
+            xRay: false,
+            // Edge detection settings
+            patternTexture: null,
+            kernelSize: 1,
+            blur: false,
+            edgeGlow: 0.0,
+            usePatternTexture: false
+        });
+        //SMAA
+        const smaaEffect = new SMAAEffect();
+        // Create effect pass with both outline and SMAA
+        const effectPass = new EffectPass(this.camera, this.outlineEffect, smaaEffect);
+        effectPass.renderToScreen = true;
 
-            //add effect pass to composer
-            this.composer.addPass(effectPass);
-        }
+        //add effect pass to composer
+        this.composer.addPass(effectPass);
+
         // Add floor disc
         const floorGeometry = new THREE.CircleGeometry(5, 48);
         const floorMaterial = new THREE.MeshStandardMaterial({
@@ -347,7 +347,7 @@ class HotspotManager {
             };
 
 
-            const modelPath = 'media/model/AxelJack_v3_draco.glb';
+            const modelPath = 'media/model/compressed_1753456646292_AxelJack_v4.glb';
             console.log('Loading model from:', modelPath);
 
             // this.loader.load(modelPath, (gltf) => {
@@ -1340,14 +1340,7 @@ class HotspotManager {
 
     animate() {
         // Disable shadow and tone mapping on mobile for performance
-        if (IS_MOBILE) {
-            this.renderer.shadowMap.enabled = false;
-            this.renderer.toneMapping = THREE.NoToneMapping;
-            this.renderer.toneMappingExposure = 1.0;
-        } else {
-            this.renderer.toneMapping = THREE.LinearToneMapping;
-            this.renderer.toneMappingExposure = 0.95;
-        }
+        
         // Pause rendering when page is hidden
         if (document.hidden) return;
         requestAnimationFrame(this.animate.bind(this));
@@ -1366,13 +1359,14 @@ class HotspotManager {
             this.mixer.update(delta);
         }
 
-        // Render using composer (postprocessing effects) if not mobile
-        if (!IS_MOBILE && this.composer) {
-            this.composer.render();
-        } else {
-            this.renderer.render(this.scene, this.camera);
-        }
-
+        //Render using composer (postprocessing effects) if not mobile
+        // if (!IS_MOBILE && this.composer) {
+        //     this.composer.render();
+        // } else {
+        //     this.renderer.render(this.scene, this.camera);
+        // }
+        //this.renderer.render(this.scene, this.camera);
+        this.composer.render();
         this.stats.update();
     }
 

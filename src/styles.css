@@ -190,9 +190,19 @@ canvas {
         font-size: 11pt;
     }
 
-    #right-center-arrow {
+    #mouse-control {
         display: none;
       }
+
+      #fullscreenBtn {
+        display: none;
+      } 
+      .button-column{
+        top: 80px;
+        flex-direction: row;
+      }
+      
+    reset
       
 }
 
@@ -412,27 +422,6 @@ canvas {
     background-color: #d4d4d4c4;
 }
 
-@media (max-width: 600px) {
-    .button-column {
-        top: 30%;
-    }
-}
-
-/* .reset-btn {
-    bottom: 80px;
-    left: 20px;
-}
-
-.techspec-btn {
-    bottom: 140px;
-    left: 20px;
-}
-
-.fullscreen-btn {
-    bottom: 20px;
-    left: 20px;
-} */
-
 
 #specModal {
     display: none;
@@ -625,7 +614,7 @@ canvas {
     border-radius: 50%;
 }
 
-#right-center-arrow {
+#mouse-control {
   position: fixed;
   right: 24px;
   top: 100px;

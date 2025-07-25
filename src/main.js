@@ -111,11 +111,16 @@ class HotspotManager {
             //preserveDrawingBuffer: false
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        this.renderer.setPixelRatio(1);
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.getElementById('container').appendChild(this.renderer.domElement);
+        if (IS_MOBILE) {
+            this.renderer.shadowMap.enabled = false;
+            this.renderer.shadowMap.enabled = false;
+            this.renderer.toneMapping = THREE.NoToneMapping;
+        }
 
         // Add WebGL context loss handler
         this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
@@ -138,6 +143,8 @@ class HotspotManager {
         this.renderer.toneMapping = THREE.LinearToneMapping; // or THREE.ReinhardToneMapping
         this.renderer.toneMappingExposure = 0.95; // adjust brightness here (try 1.2–2.0)
         this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.toneMapping = IS_MOBILE ? THREE.NoToneMapping : THREE.LinearToneMapping;
+        this.renderer.toneMappingExposure = IS_MOBILE ? 1 : 0.95;
 
         // Add lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
@@ -340,7 +347,7 @@ class HotspotManager {
             };
 
 
-            const modelPath = 'media/model/AxelJack_v3.glb';
+            const modelPath = 'media/model/AxelJack_v3_draco.glb';
             console.log('Loading model from:', modelPath);
 
             // this.loader.load(modelPath, (gltf) => {
@@ -932,6 +939,10 @@ class HotspotManager {
         this.cameraChanged = false;
         this.controlsChanged = true;
         this.updateHotspotPositions();
+        if (!IS_MOBILE) {
+            this.updateHotspotPositions();
+        }
+
     }
 
     updateTitleDisplay() {
@@ -1167,7 +1178,7 @@ class HotspotManager {
 
         const pixelRatio = Math.min(window.devicePixelRatio, 2);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // or just 1.0 for testing
+        this.renderer.setPixelRatio(1); // or just 1.0 for testing
 
 
         // Update composer
@@ -1328,31 +1339,40 @@ class HotspotManager {
     }
 
     animate() {
+        // Disable shadow and tone mapping on mobile for performance
+        if (IS_MOBILE) {
+            this.renderer.shadowMap.enabled = false;
+            this.renderer.toneMapping = THREE.NoToneMapping;
+            this.renderer.toneMappingExposure = 1.0;
+        } else {
+            this.renderer.toneMapping = THREE.LinearToneMapping;
+            this.renderer.toneMappingExposure = 0.95;
+        }
         // Pause rendering when page is hidden
         if (document.hidden) return;
         requestAnimationFrame(this.animate.bind(this));
         this.controls.update();
+
         // Only update hotspot positions if camera or controls changed
         if (this.cameraChanged || this.controlsChanged) {
             this.updateHotspotPositions();
             this.cameraChanged = false;
             this.controlsChanged = false;
         }
-        //this.renderer.render(this.scene, this.camera);
-        if (this.composer) {
-            this.composer.render();
-        } else {
-            this.renderer.render(this.scene, this.camera);
-        }
+
+        // Update animations
         if (this.mixer) {
             const delta = this.clock.getDelta();
             this.mixer.update(delta);
         }
-        if (IS_MOBILE || !this.composer) {
-            this.renderer.render(this.scene, this.camera);
-        } else {
+
+        // Render using composer (postprocessing effects) if not mobile
+        if (!IS_MOBILE && this.composer) {
             this.composer.render();
+        } else {
+            this.renderer.render(this.scene, this.camera);
         }
+
         this.stats.update();
     }
 

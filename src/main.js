@@ -6,6 +6,7 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 //import { Mesh } from 'three';
 import { WebGLRenderer } from "three";
+import { SRGBColorSpace } from 'three';
 import { EffectComposer, RenderPass, EffectPass, OutlineEffect, BlendFunction, SMAAEffect } from 'postprocessing';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 
@@ -120,7 +121,7 @@ class HotspotManager {
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(1);
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.outputEncoding = SRGBColorSpace;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.getElementById('container').appendChild(this.renderer.domElement);
@@ -142,7 +143,7 @@ class HotspotManager {
         // 🔆 Enable tone mapping and adjust exposure
         this.renderer.toneMapping = THREE.LinearToneMapping; // or THREE.ReinhardToneMapping
         this.renderer.toneMappingExposure = 0.95; // adjust brightness here (try 1.2–2.0)
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.outputEncoding = SRGBColorSpace;
         this.renderer.toneMapping = THREE.LinearToneMapping;
         
 
@@ -310,7 +311,7 @@ class HotspotManager {
     setupLoaders() {
         // Setup DRACO loader
         this.dracoLoader = new DRACOLoader();
-        this.dracoLoader.setDecoderPath('/lib/draco/');
+        this.dracoLoader.setDecoderPath('./lib/draco/');
         this.dracoLoader.preload();
 
         // Setup GLTF loader with loading manager

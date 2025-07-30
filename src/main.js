@@ -194,7 +194,7 @@ class HotspotManager {
             // Edge detection settings
             patternTexture: null,
             kernelSize: 1,
-            blur: false,
+            blur: true,
             edgeGlow: 0.0,
             usePatternTexture: false
         });
@@ -291,6 +291,7 @@ class HotspotManager {
         this.setupFullscreenButton();
         this.setupTechSpecToggle();
         this.setupResetButton();
+        this.setupPDFButton();
 
         //test outliene box
         // const test = new THREE.Mesh(
@@ -348,7 +349,7 @@ class HotspotManager {
             };
 
 
-            const modelPath = 'media/model/compressed_1753456646292_AxelJack_v4.glb';
+            const modelPath = 'media/model/compressed_1753887488876_AxelJack_v7.glb';
             console.log('Loading model from:', modelPath);
 
             // this.loader.load(modelPath, (gltf) => {
@@ -527,7 +528,7 @@ class HotspotManager {
                     this.initialCameraPosition = new THREE.Vector3(0, 0, cameraZ * -.75);
                     this.initialCameraTarget = new THREE.Vector3(0, 0, 0);
                     // Set orbit controls target to model center (orbit mode)
-                    this.controls.target.set(0, 0, 0);
+                    this.controls.target.set(0.2, 0, 0);
                     this.controls.update();
                     // Create hotspots after model is loaded
                     this.createDefaultHotspots();
@@ -645,23 +646,25 @@ class HotspotManager {
         //outline seleected mesh
         const meshToOutline = this.model.getObjectByName(hotspotData.node);
 
-        if (meshToOutline && meshToOutline.isMesh) {
-            this.outlineEffect.selection.set([meshToOutline]);
-            this.animateOutlineEdgeStrength(0, 5, 3000);
-            console.log('✔ Outline applied to:', meshToOutline.name);
-        } else if (meshToOutline) {
-            // If it's a group, find a mesh inside
-            let childMesh = null;
-            meshToOutline.traverse(child => {
-                if (child.isMesh && !childMesh) {
-                    childMesh = child;
+        if (meshToOutline) {
+            const meshesToSelect = [];
+        
+            // If the node is a group or has children, traverse it
+            meshToOutline.traverse((child) => {
+                if (child.isMesh) {
+                    meshesToSelect.push(child);
                 }
             });
-
-            if (childMesh) {
-                this.outlineEffect.selection.set([childMesh]);
-                this.animateOutlineEdgeStrength(0, 5, 3000);
-                console.log('✔ Outline applied to child mesh:', childMesh.name);
+        
+            // If it is a single mesh with multiple materials, still push it
+            if (meshToOutline.isMesh && meshesToSelect.length === 0) {
+                meshesToSelect.push(meshToOutline);
+            }
+        
+            if (meshesToSelect.length > 0) {
+                this.outlineEffect.selection.set(meshesToSelect);
+                this.animateOutlineEdgeStrength(0, 5, 1500);
+                console.log('✔ Outline applied to:', meshesToSelect.map(m => m.name));
             } else {
                 console.warn('❌ No mesh found to apply outline for:', hotspotData.node);
             }
@@ -1091,65 +1094,43 @@ class HotspotManager {
         this.cameraChanged = false;
         this.controlsChanged = false;
 
-        this.raycastThrottle = (this.raycastThrottle + 1) % this.raycastInterval;
-        const doRaycast = this.raycastThrottle === 0;
-        const now = performance.now();
+        
+         // Always raycast every frame for more stable results
+    this.hotspots.forEach((hotspot) => {
+        // Get world position
+        const worldPosition = new THREE.Vector3();
+        hotspot.mesh.getWorldPosition(worldPosition);
 
-        this.hotspots.forEach(hotspot => {
-            // Get the world position of the hotspot mesh
-            const worldPosition = new THREE.Vector3();
-            hotspot.mesh.getWorldPosition(worldPosition);
+        // Project to screen coordinates
+        const screenPosition = worldPosition.clone().project(this.camera);
+        const isBehindCamera = screenPosition.z > 1;
+        const isInView = screenPosition.x >= -1 && screenPosition.x <= 1 &&
+                         screenPosition.y >= -1 && screenPosition.y <= 1;
 
-            // Project the world position to screen coordinates
-            const screenPosition = worldPosition.clone().project(this.camera);
+        const x = (screenPosition.x + 1) * window.innerWidth / 2;
+        const y = (-screenPosition.y + 1) * window.innerHeight / 2;
 
-            // Check if the point is in front of the camera and within view bounds
-            const isBehindCamera = screenPosition.z > 1;
-            const isInView = screenPosition.x >= -1 && screenPosition.x <= 1 &&
-                screenPosition.y >= -1 && screenPosition.y <= 1;
+        // Raycast to detect occlusion
+        const direction = worldPosition.clone().sub(this.camera.position).normalize();
+        this.raycaster.set(this.camera.position, direction);
+        const intersects = this.raycaster.intersectObjects(this.interactiveMeshes, true);
+        const distanceToHotspot = this.camera.position.distanceTo(worldPosition);
+        const isOccluded = intersects.length > 0 && intersects[0].distance + 0.001 < distanceToHotspot;
 
-            // Convert to screen coordinates
-            const x = (screenPosition.x + 1) * window.innerWidth / 2;
-            const y = (-screenPosition.y + 1) * window.innerHeight / 2;
+        // Update visibility using opacity transition
+        const shouldShow = !(isBehindCamera || !isInView || isOccluded);
+        hotspot.element.style.opacity = shouldShow ? '1' : '0';
+        hotspot.element.style.pointerEvents = shouldShow ? 'auto' : 'none';
 
-            // Throttle and cache raycasting
-            let isOccluded = false;
-            if (doRaycast) {
-                const direction = worldPosition.clone().sub(this.camera.position).normalize();
-                this.raycaster.set(this.camera.position, direction);
-                const intersects = this.raycaster.intersectObjects(this.interactiveMeshes, true);
-                const distanceToHotspot = this.camera.position.distanceTo(worldPosition);
-                isOccluded = intersects.length > 0 && intersects[0].distance < distanceToHotspot - 0.1;
-                this.raycastCache.set(hotspot, { isOccluded, time: now });
-            } else {
-                const cached = this.raycastCache.get(hotspot);
-                if (cached && now - cached.time < this.cacheTimeout) {
-                    isOccluded = cached.isOccluded;
-                } else {
-                    // Fallback: do a raycast if cache is stale
-                    const direction = worldPosition.clone().sub(this.camera.position).normalize();
-                    this.raycaster.set(this.camera.position, direction);
-                    const intersects = this.raycaster.intersectObjects(this.interactiveMeshes, true);
-                    const distanceToHotspot = this.camera.position.distanceTo(worldPosition);
-                    isOccluded = intersects.length > 0 && intersects[0].distance < distanceToHotspot - 0.1;
-                    this.raycastCache.set(hotspot, { isOccluded, time: now });
-                }
-            }
+        // Position updates
+        hotspot.element.style.left = `${x}px`;
+        hotspot.element.style.top = `${y}px`;
 
-            // Update visibility based on all conditions
-            const shouldShow = !(isBehindCamera || !isInView || isOccluded);
-            if (hotspot.element.style.display !== (shouldShow ? 'block' : 'none')) {
-                hotspot.element.style.display = shouldShow ? 'block' : 'none';
-            }
-            if (hotspot.info.style.display !== (shouldShow && (hotspot === this.selectedHotspot || hotspot.element.matches(':hover')) ? 'block' : 'none')) {
-                hotspot.info.style.display = (shouldShow && (hotspot === this.selectedHotspot || hotspot.element.matches(':hover'))) ? 'block' : 'none';
-            }
+        // Handle info panel
+        const showInfo = shouldShow && (hotspot === this.selectedHotspot || hotspot.element.matches(':hover'));
+        hotspot.info.style.opacity = showInfo ? '1' : '0';
+        hotspot.info.style.pointerEvents = showInfo ? 'auto' : 'none';
 
-            // Only update position if changed
-            if (hotspot.element.style.left !== `${x}px`) hotspot.element.style.left = `${x}px`;
-            if (hotspot.element.style.top !== `${y}px`) hotspot.element.style.top = `${y}px`;
-            if (hotspot.info.style.left !== `${x + 20}px`) hotspot.info.style.left = `${x + 20}px`;
-            if (hotspot.info.style.top !== `${y}px`) hotspot.info.style.top = `${y}px`;
 
             function isMobileView() {
                 return window.innerWidth < 600 || window.innerHeight < 400;
@@ -1206,7 +1187,25 @@ class HotspotManager {
             }
         });
     }
+    setupPDFButton() {
+        const button = document.getElementById('pdfBtn');
+        const icon = document.getElementById('pdfIcon');
 
+        button.addEventListener('click', () => {
+            // Replace with the path to your PDF
+            const pdfUrl = 'media/65P10AR_Rev02_12-24.pdf';
+            
+            // Open in a new tab
+            window.open(pdfUrl, '_blank');
+        });
+        // button.addEventListener('mouseenter', () => {
+        //     icon.src = 'media/PDF_active.svg';
+        // });
+
+        button.addEventListener('mouseleave', () => {
+            icon.src = 'media/PDF_default.svg';
+        });
+    }
     setupResetButton() {
         const button = document.getElementById('resetBtn');
         const icon = document.getElementById('resetIcon');
@@ -1216,7 +1215,7 @@ class HotspotManager {
 
             // Enforce reset to a comfortable distance and allow zooming
             const targetPos = this.initialCameraPosition.clone();
-            const targetTarget = this.initialCameraTarget.clone();
+            const targetTarget = new THREE.Vector3(0.2, 0, 0);
             const startPos = this.camera.position.clone();
             const startTarget = this.controls.target.clone();
             const duration = 2000;

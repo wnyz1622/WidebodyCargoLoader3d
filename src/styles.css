@@ -72,8 +72,7 @@ canvas {
 /* description panel */
 .hotspot-info {
     position: absolute;
-    background: #363D47;
-    opacity: 95%;
+    background: #363d47f5;
     color: white;
     padding: 21px;
     padding-bottom: 21px;
@@ -94,6 +93,7 @@ canvas {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
 }
 
 .hotspot-info.active {
@@ -105,6 +105,7 @@ canvas {
     z-index: 1001;
 }
 
+  
 .hotspot-info .closeSpecIcon {
     position: absolute;
     top: 12px;
@@ -204,14 +205,20 @@ canvas {
         top: 80px;
         flex-direction: row;
     }
+    .hotspot {
+        width: 18px;
+        height: 18px;
+    }
+    .button-column {
+        gap: 15px;
+    }
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
     .hotspot-info.mobile-fixed {
         position: fixed;
-        top: 120px;
-        right: 30px;
-
+        top: 70px;
+        right: 20px;
         /* Prevent overflow below header */
         overflow-y: auto;
         /* Add scroll if content overflows */
@@ -219,7 +226,10 @@ canvas {
         height: auto;
         width: 35%;
     }
-
+    .hotspot {
+        width: 18px;
+        height: 18px;
+    }
     .hotspot-description {
         font-size: 8pt;
         line-height: 1.4em;
@@ -237,8 +247,16 @@ canvas {
     }
 
     .button-column {
-        top: 80px;
+        top: 70px;
         flex-direction: row;
+        
+    }
+    .icon-button img {
+        width: 18px;
+        height: 18px;
+    }
+    .button-column {
+        gap: 2px;
     }
 }
 
@@ -446,16 +464,18 @@ canvas {
     color: #fff;
     padding: 30px;
 
-    /* Increase this value for more space */
-
     border-radius: 0px;
     width: 500px;
     height: 100%;
+    max-height: calc(100% - 56px);
+    /* allow full height minus header */
     max-width: fit-content;
-    max-height: 100%;
+    
     overflow-y: auto;
     font-family: 'Noto Sans', sans-serif;
     z-index: 1005;
+    box-sizing: border-box;
+    /* box-sizing makes padding count towards total height and width */
 }
 
 #closeSpecIcon {
@@ -537,7 +557,7 @@ canvas {
 /* Navigation UI Styles */
 .navigation-ui {
     position: fixed;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;

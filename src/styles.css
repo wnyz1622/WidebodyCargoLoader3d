@@ -435,6 +435,7 @@ canvas {
     border: none;
     cursor: pointer;
     padding: 0;
+    user-select: none;
 }
 
 /* Image style for all buttons */
@@ -451,7 +452,6 @@ canvas {
 .icon-button:hover img {
     background-color: #d4d4d4c4;
 }
-
 
 #specModal {
     display: none;
@@ -564,6 +564,7 @@ canvas {
     align-items: center;
     gap: 10px;
     z-index: 1003;
+    user-select: none;
 }
 
 .nav-button {

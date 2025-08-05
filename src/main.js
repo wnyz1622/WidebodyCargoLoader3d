@@ -208,7 +208,7 @@ class HotspotManager {
         this.composer.addPass(effectPass);
 
         // Add floor disc
-        const floorGeometry = new THREE.CircleGeometry(5, 48);
+        const floorGeometry = new THREE.CircleGeometry(8, 48);
         const floorMaterial = new THREE.MeshStandardMaterial({
             color: 0xbbbbbb,
             transparent: true,
@@ -219,7 +219,7 @@ class HotspotManager {
         });
         const floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.rotation.x = -Math.PI / 2; // Rotate to be horizontal
-        floor.position.y = -0.53; // Position lower below the model
+        floor.position.y = -2.5; // Position lower below the model
         floor.position.z = 0;
         floor.position.x = 0;
         floor.receiveShadow = true;
@@ -237,7 +237,7 @@ class HotspotManager {
 
         // Set orbit boundaries
         this.controls.minDistance = 0.1; // Minimum zoom distance
-        this.controls.maxDistance = 5; // Maximum zoom distance
+        this.controls.maxDistance = 8; // Maximum zoom distance
         this.controls.minPolarAngle = Math.PI / 6; // Minimum vertical angle (30 degrees)
         this.controls.maxPolarAngle = Math.PI / 2; // Maximum vertical angle (120 degrees)
         // this.controls.minAzimuthAngle = -Math.PI; // Allow full 360 rotation
@@ -349,7 +349,7 @@ class HotspotManager {
             };
 
 
-            const modelPath = 'media/model/compressed_1753887488876_AxelJack_v7.glb';
+            const modelPath = 'media/model/CargoLoader_v1.glb';
             console.log('Loading model from:', modelPath);
 
             // this.loader.load(modelPath, (gltf) => {
@@ -509,6 +509,7 @@ class HotspotManager {
                     const center = box.getCenter(new THREE.Vector3());
                     this.model.position.sub(center);
 
+
                     // 180 degrees in radians
                     this.model.rotation.y = Math.PI / 1.25;
 
@@ -522,10 +523,10 @@ class HotspotManager {
                     let cameraZ = Math.abs(maxDim / Math.tan(fov / 2));
                     // Enforce a comfortable default reset distance (e.g., z=2)
                     const defaultResetDistance = 5; // Between minDistance (0.1) and maxDistance (25)
-                    this.camera.position.set(0, 0, cameraZ * -.75);
+                    this.camera.position.set(0, 0, cameraZ * -5);
                     this.camera.lookAt(0, 0, 0);
                     this.camera.updateProjectionMatrix();
-                    this.initialCameraPosition = new THREE.Vector3(0, 0, cameraZ * -.75);
+                    this.initialCameraPosition = new THREE.Vector3(0, 0, cameraZ * -5);
                     this.initialCameraTarget = new THREE.Vector3(0, 0, 0);
                     // Set orbit controls target to model center (orbit mode)
                     this.controls.target.set(0.2, 0, 0);
@@ -1193,10 +1194,10 @@ class HotspotManager {
 
         button.addEventListener('click', () => {
             // Replace with the path to your PDF
-            const pdfUrl = 'media/65P10AR_Rev02_12-24.pdf';
+            const pdfUrl = 'media/Commander Loader C15i Manual.pdf';
             
             // Open in a new tab
-            window.open(pdfUrl, '_blank');
+            window.open(pdfUrl, '_blank'); 
         });
         // button.addEventListener('mouseenter', () => {
         //     icon.src = 'media/PDF_active.svg';
@@ -1267,40 +1268,47 @@ class HotspotManager {
         const modal = document.getElementById('specModal');
         const content = document.getElementById('specContent');
         const closeIcon = document.getElementById('closeSpecIcon');
-
-        // Track toggle state
+    
         let isVisible = false;
-
+    
+        // Recursive renderer for nested spec objects
+        const renderSpecs = (obj, container, level = 0) => {
+            for (const [key, value] of Object.entries(obj)) {
+                if (typeof value === 'object' && value !== null) {
+                    const section = document.createElement(level === 0 ? 'h2' : 'h3');
+                    section.className = 'spec-section';
+                    section.textContent = key;
+                    container.appendChild(section);
+    
+                    renderSpecs(value, container, level + 1); // Recursively render sub-objects
+                } else {
+                    const item = document.createElement('div');
+                    item.className = 'spec-item';
+    
+                    const label = document.createElement('span');
+                    label.className = 'spec-label';
+                    label.textContent = `${key}: `;
+    
+                    const val = document.createElement('span');
+                    val.className = 'spec-value';
+                    val.textContent = value;
+    
+                    item.appendChild(label);
+                    item.appendChild(val);
+                    container.appendChild(item);
+                }
+            }
+        };
+    
         const showSpecs = async () => {
             try {
                 const response = await fetch('specs.json');
+                if (!response.ok) throw new Error('Failed to load specs.json');
+    
                 const specs = await response.json();
                 content.innerHTML = '';
-
-                for (const [key, value] of Object.entries(specs)) {
-                    if (value === "") {
-                        const section = document.createElement('h2');
-                        section.className = 'spec-section';
-                        section.textContent = key;
-                        content.appendChild(section);
-                    } else {
-                        const item = document.createElement('div');
-                        item.className = 'spec-item';
-
-                        const label = document.createElement('span');
-                        label.className = 'spec-label';
-                        label.textContent = `${key}:`;
-
-                        const val = document.createElement('span');
-                        val.className = 'spec-value';
-                        val.textContent = value;
-
-                        item.appendChild(label);
-                        item.appendChild(val);
-                        content.appendChild(item);
-                    }
-                }
-
+                renderSpecs(specs, content);
+    
                 modal.style.display = 'block';
                 icon.src = 'media/Spec_active.svg';
                 isVisible = true;
@@ -1312,13 +1320,13 @@ class HotspotManager {
                 console.error(err);
             }
         };
-
+    
         const hideSpecs = () => {
             modal.style.display = 'none';
             icon.src = 'media/Spec_default.svg';
             isVisible = false;
         };
-
+    
         button.addEventListener('click', () => {
             if (isVisible) {
                 hideSpecs();
@@ -1326,17 +1334,19 @@ class HotspotManager {
                 showSpecs();
             }
         });
-
+    
         closeIcon.addEventListener('click', hideSpecs);
-
+    
         button.addEventListener('mouseenter', () => {
             if (!isVisible) icon.src = 'media/Spec_active.svg';
         });
-
+    
         button.addEventListener('mouseleave', () => {
             if (!isVisible) icon.src = 'media/Spec_default.svg';
         });
     }
+    
+
 
     animate() {
         // Disable shadow and tone mapping on mobile for performance

@@ -1,24 +1,109 @@
 {
-  "Model": "Model 65P10AR",
-  "Length": "70” (1778mm)",
-  "Width": "45” (1143mm)",
-  "Height": "34” (864mm)",
-  "Weight": "560 pounds (254 kg)",
-  "Main Landing Gear": "A300, A310, A319, A320, A321, A330, A340-200/300, B707, B717, B720, B727, B737, B747, B757, B767, B787, DC8, DC10, L1011, MD11",
-  "Nose Landing Gear": "A300, A310, A330, A340-200/300, A350, B727, B747, B757, B767, B787, DC10, L1011, MD11",
-  "Rated Capacity": "65 tons (59.0 m. tons)",
-  "Low Height": "10.25 inches (260 mm)",
-  "Hydraulic Lift": "11 inches (279 mm)",
-  "Extension Screw": "4.75 inches (121 mm)",
-  "Total Extended Height": "26 inches (660 mm)",
-  "Base Width": "8.75 inches (222 mm)",
-  "Cylinder Diameter": "8 inches (203 mm)",
-  "Oil Pressure at Rated Capacity": "7000 psig (492 kg/sq cm)",
-  "Safety Pop-off Valve": "68.9 tons (62.5 m. tons)",
-  "Proof Load": "97.5 tons (88.5 m. tons)",
-  "Floor Loading at Rated Capacity": "825 psi (58 kg/sq cm)",
-  "Reservoir Capacity": "5.5 gallons (20.8 liters) Hydraulic Fluid",
-  "Hydraulic Fluid": "MIL-PRF-5606 or equivalent",
-  "Maximum Towing Speed": "5 mph (8 km/h)",
-  "Approximate Jack Net Weight": "500 lbs (227 kg)"
+  "Models": {
+    "Standard": {
+      "Operating Height - Bridge (Max)": "3.62 m (143 in)",
+      "Operating Height - Rear Platform (Max)": "3.62 m (143 in)",
+      "Operating Width (Max)": "2.49 m (98 in)",
+      "Overall Length": "8.69 m (342 in)",
+      "Overall Width (Including Cab)": "3.42 m (135 in)",
+      "Overall Height (Including Cab)": "3.02 m (119 in)",
+      "Wheelbase": "3.25 m (128 in)"
+    },
+    "Wide": {
+      "Operating Height - Bridge (Max)": "3.62 m (143 in)",
+      "Operating Height - Rear Platform (Max)": "3.62 m (143 in)",
+      "Operating Width (Max)": "3.20 m (126 in)",
+      "Overall Length": "8.69 m (342 in)",
+      "Overall Width (Including Cab)": "4.22 m (166 in)",
+      "Overall Height (Including Cab)": "3.02 m (119 in)",
+      "Wheelbase": "3.25 m (128 in)"
+    },
+    "Universal": {
+      "Operating Height - Bridge (Max)": "5.58 m (220 in)",
+      "Operating Height - Rear Platform (Max)": "3.55 m (140 in)",
+      "Operating Width (Max)": "3.20 m (126 in)",
+      "Overall Length": "8.69 m (342 in)",
+      "Overall Width (Including Cab)": "4.22 m (166 in)",
+      "Overall Height (Including Cab)": "3.02 m (119 in)",
+      "Wheelbase": "3.25 m (128 in)"
+    },
+    "Universal 161": {
+      "Operating Height - Bridge (Max)": "5.58 m (220 in)",
+      "Operating Height - Rear Platform (Max)": "4.09 m (161 in)",
+      "Operating Width (Max)": "3.25 m (128 in)",
+      "Overall Length": "8.69 m (342 in)",
+      "Overall Width (Including Cab)": "4.22 m (166 in)",
+      "Overall Height (Including Cab)": "3.02 m (119 in)",
+      "Wheelbase": "3.25 m (128 in)"
+    }
+  },
+  "Operating Performance": {
+    "Lift Capacity (Maximum)": "7,050 kg (15,500 lb)",
+    "Lift Speed (Rear Platform)": "137 mm/sec (5.4 in/sec)",
+    "Lift Speed (Bridge)": "4.6 mm/sec (0.18 in/sec)",
+    "Convey Speed": "18.3 mpm (60 fpm)",
+    "Drive Speed (Maximum)": "11.1 km/hr (7 mph)",
+    "Turning Radius": "7.9 m (26 ft)"
+  },
+  "Engine": {
+    "Type": "Deutz TCD 2012 L4",
+    "Power": "75 kW (100 hp)",
+    "Compliance": "COM/Tier 3"
+  },
+  "Power Module": {
+    "Features": [
+      "Swing-out Power Module with Hinged Front Doors",
+      "Electric Emergency Hydraulic Pump"
+    ]
+  },
+  "Main Frame": {
+    "Drive": "Hydrostatic Drive Propulsion with Hydraulic/Dynamic Braking",
+    "Stabilizers": "Hydraulic Activated Stabilizers - 6",
+    "Wheels": "Solid Rubber Tires Mounted on Independent Drive Modules"
+  },
+  "Operator Station": {
+    "Consoles": "Separate Driver and Operator Consoles",
+    "Platform Controls": [
+      "Manually Adjustable Platform - Forward and Aft - Standard and Wide",
+      "Powered Adjustable Platform - Forward and Aft - Universal"
+    ],
+    "Start/Stop": "Engine Start/Stop Switch - Dual Master"
+  },
+  "Controls and Instruments": {
+    "Panels": "Lighted Instrumentation Panels",
+    "Ignition": "Keyless Ignition Switch",
+    "Emergency Stop": "Emergency Stop Switch"
+  },
+  "Bridge": {
+    "Deck Shift": [
+      "5 Rows of Heirrolls® Container Side-Shift - Standard",
+      "8 Rows of Heirrolls® Pallet Side-Shift - Wide and Universal"
+    ],
+    "Features": [
+      "Automatic Drive Speed Limit with Bridge Raised",
+      "Powered Folding Wings with Powered Roller",
+      "Removable Steel Deck Plates"
+    ]
+  },
+  "Rear Platform": {
+    "Loading": "Right/Left/Rear Pallet Load",
+    "Features": [
+      "Rear Center Rotation and Pallet Side Shift",
+      "Hydraulic Stops - Rear, LHS, RHS",
+      "HeirRoll® Deck with Steel Rollers",
+      "Removable Steel Deck Plates"
+    ]
+  },
+  "Electrical": {
+    "Power": "24-Volt DC with Heavy Duty Starter and 80 Amp Alternator",
+    "Battery": "Two (2) x 12V 950 CCA",
+    "Diagnostics": "PLC Controllers with Diagnostic Read-out",
+    "Lighting": [
+      "Headlights",
+      "Tail Lights",
+      "Reverse Lights",
+      "Emergency Flashers",
+      "Variety of Beacons and Audible Alarms"
+    ]
+  }
 }

@@ -1,128 +1,98 @@
 [
   {
-    "node": "01_HydraulicFuse",
-    "title": "Hydraulic Fuse",
-    "camera": "Cam_01_HydraulicFuse",
-    "description": "Hydraulic fuse at the cylinder assembly prevents lowering of load in the event of a hose failur."
+    "node": "01_Chassis",
+    "title": "Chassis",
+    "camera": "Cam_01_Chassis",
+    "description": "The steel framework of the vehicle.  Two steerable drive wheels are located at the front, and four wheels support the rear of the chassis."
   },
   {
-    "node": "02_AirPumpLubricator",
-    "title": "Air Pump Lubricator",
-    "camera": "Cam_02_AirPumpLubricator",
-    "description": "The air pump lubricator is an inline component mounted on the air supply line, designed to deliver a fine mist of oil into the incoming compressed air. This ensures continuous lubrication of the internal moving parts in the pneumatic (air-powered) hydraulic pump, reducing wear and extending pump life. It typically features a transparent reservoir for oil level monitoring and an adjustable metering valve to control flow rate."
+    "node": "02_Bridge",
+    "title": "Bridge",
+    "camera": "Cam_02_Bridge",
+    "description": "The bridge is raised and lowered via scissors assembly lifts.  Cargo can be moved fore and aft, and side to side on the bridge."
   },
   {
-    "node": "03_LoadGauge",
-    "title": "Load Gauge",
-    "camera": "Cam_03_LoadGauge",
-    "description": "Load gauge for load indication (reads tons/psig)"
+    "node": "03_Operator'sCab",
+    "title": "Operator's Cab",
+    "camera": "Cam_03_OperatorsCab",
+    "description": "The operator's cab contains the control units for driving the vehicle and transfering cargo."
   },
   {
-    "node": "04_RainHat",
-    "title": "Rain Hat",
-    "camera": "Cam_04_RainHat",
-    "description": "The “rain hat” on a Malabar jack is a casual nickname for the protective cap or cover that sits on top of the hydraulic ram (floating cylinder) when it’s fully retracted. It is a weather shield that helps keep rain, dust, and debris out of the cylinder and ram seal area."
+    "node": "04_Platform",
+    "title": "Platform",
+    "camera": "Cam_04_Platform",
+    "description": "The platform is supported by a scissors assembly, and is raised/lowered by hydraulic cylinders.  The configuration of the platform determines the layout of the rollers."
   },
   {
-  "title": "Swivel Caster",
-  "description": "8 inch diameter heavy duty swivel casters with Skydrol resistant tread.",
-  "node": "05_SwivelCaster",
-  "camera": "Cam_05_SwivelCaster"
-},
-{
-  "title": "Hydraulic Control Manifold Block",
-  "description": "This block is the distribution and logic center for fluid moving from the hand pumps to the jack’s lifting cylinder. It includes multiple internal hydraulic valves that route fluid from both pumps to the lifting cylinder, control system pressure, and prevent backflow or overpressure.",
-  "node": "06_DualHandpumpAssembly",
-  "camera": "Cam_06_DualHandpumpAssembly"
-},
-{
-  "title": "Oil Filter Cap",
-  "description": "Threaded cap located at the top of the hydraulic filter housing. It secures the internal filter element and forms a pressure-tight seal to contain hydraulic fluid.",
-   "node": "07_OilFilterCap",
-  "camera": "Cam_07_OilFilterCap"  
-},
-{
-  "title": "Air Valve Assembly",
-  "description": "This is the pneumatic control valve that regulates the flow of compressed air from the air inlet to the air-powered hydraulic pump. It features a push-button or toggle actuator, a machined aluminum body, and a threaded port for the air hose connection. When engaged, the valve directs high-pressure air into the pump, powering the hydraulic system without manual input.",
-  "node": "08_AirValve",
-  "camera": "Cam_08_AirValve"  
-},
-{
-  "title": "Floating Cylinder Assembly",
-  "description": "Cylinder assembly allows unit to track arc of landing gear jack point, eliminating excessive side loads on jack and landing gear",
-  "node": "09_FloatingCylinderAssembly",
-  "camera": "Cam_09_FloatingCylinderAssembly"  
-},
-{
-  "title": "Reservoir",
-  "description": "The reservoir stores hydraulic fluid used to operate the jack. It supplies fluid to the pump system and is typically equipped with a fill cap, vent, and dipstick for monitoring fluid levels.",
-  "node": "10_Reservoir",
-  "camera": "Cam_10_Reservoir" 
-},
-{
-  "title": "Front Wheel",
-  "description": "Retractable front wheel with Skydrol resistant tread.",
-  "node": "11_FrontWheel",
-  "camera": "Cam_11_FrontWheel" 
-},
-{
-  "title": "Tow Handle",
-  "description": "3 1/8” Inside Diameter Lunette Eye",
-  "node": "12_TowHandle",
-  "camera": "Cam_12_TowHandle"  
-},
-{
-  "title": "Control Console",
-  "description": "All jack operating controls",
-  "node": "13_ControlConsole",
-  "camera": "Cam_13_ControlConsole"
-},
-{
-  "title": "Hydraulic Reservoir",
-  "description": "This hydraulic reservoir stores the fluid needed to power the jack’s lifting system, supplying consistent pressure to the pump during operation. It’s designed with a vented cap, welded steel body, and secure mounting brackets to withstand rugged use and vibration.",
-  "node": "14_HydraulicReservoir",
-  "camera": "Cam_14_HydraulicReservoir"
-},
-{
-  "title": "High-Volume / Low-Pressure Pump",
-  "description": "Used to quickly extend the cylinder to contact the aircraft axle with minimal resistance. It moves a lot of fluid per stroke but can’t generate high pressure. Ideal for rapid positioning without load. Do not use this pump to lift an aircraft. This could stall or cause uneven force buildup and could damage the Axle Jack.",
-  "node": "15_High-VolumeLow-PressurePump",
-  "camera": "Cam_15_High-Volume/Low-PressurePump"
-},
-{
-  "title": "Low-Volume / High-Pressure Pump",
-  "description": "Once contact is made with the aircraft, this pump delivers small amounts of fluid under high pressure—enough to lift the aircraft. This pump is all about precision and force, not speed.",
-  "node": "16_LowPressurePump",
-  "camera": "Cam_16_LowPressurePump"
-},
-{
-  "title": "Air-Actuated Release Valve",
-  "description": "This valve is used for lowering the jack. It allows pressure to actuate the hydraulic release mechanism, which lowers the ram within the floating cylinder assembly in a controlled manner.",
-  "node": "17_Air-ActuatedReleaseValve",
-  "camera": "Cam_17_Air-ActuatedReleaseValve"
-},
-{
-  "title": "Hydraulic Release valve",
-  "description": "This valve is used to manually lower the jack by releasing pressure from the hydraulic system back into the reservoir. Just a slight turn allows for a slow, controlled descent. If the relase valve is opened too fast, the safety fuse will close. To reset the fuse, close the release valve and operate the pump.",
-  "node": "18_HydraulicReleaseValve",
-  "camera": "Cam_18_HydraulicReleaseValve"
-},
-{
-  "title": "Axle Jack Compatibility Panel",
-  "description": "This info panel lists the aircraft types compatible with the Malabar 65P10AR axle jack. It separates supported models by MLG (Main Landing Gear) and NLG (Nose Landing Gear), including Airbus (A300–A340), Boeing (707–777), McDonnell Douglas (DC-9, DC-10, MD11, etc.), and Lockheed (L1011). The panel ensures proper usage and aircraft coverage, confirming that the jack meets operational requirements across a wide range of commercial jets.",
-  "node": "19_AxleJackCompatibilityPanel",
-  "camera": "Cam_19_AxleJackCompatibilityPanel"
-},
-{
-  "title": "Dual Pump Handle",
-  "description": "This handle is used for manually operating the hydraulic jack. It connects to one of the two hand pump pistons.",
-  "node": "20_DualPumpHandle",
-  "camera": "Cam_20_DualPumpHandle"
-},
-{
-  "title": "Air-Powered Hydraulic Pump Assembly",
-  "description": "This pump converts compressed air from a shop air line into hydraulic pressure, allowing the jack to be powered without manual pumping.",
-  "node": "21_Air-PoweredHydraulicPumpAssembly",
-  "camera": "Cam_21_Air-PoweredHydraulicPumpAssembly"
-}
+    "node": "05_ExtensionDeck_Optional",
+    "title": "Extension Deck (Optional)",
+    "camera": "Cam_05_ExtensionDeck_Optional",
+    "description": "The extension deck is an extra platform that can mechanically attach to the rear of the loader."
+  },
+  {
+    "node": "06_UnderPlatformCamera",
+    "title": "Under Platform Camera",
+    "camera": "Cam_06_UnderPlatformCamera",
+    "description": "This is an optional component that allows the operator to oversee activity underneath the platform.  A display screen is located on the same side as the operator's panel."
+  },
+  {
+    "node": "07_PowerModule",
+    "title": "Power Module",
+    "camera": "Cam_07_PowerModule",
+    "description": "The power module can be found at the front of the loader, on the right side.  Controls and indicators can be found on the right-hand side of the module."
+  },
+  {
+    "node": "08_MainControlPanel",
+    "title": "Main Control Panel (Diesel vs Electric)",
+    "camera": "Cam_08_MainControlPanel",
+    "description": "Includes panel lights, hour meter, fault indicators, a manual override switch, and general system gauges which allow the operator to oversee the general state of the vehicle."
+  },
+  {
+    "node": "09_SupervisorKeyResetPanel",
+    "title": "Supervisor Key Reset Panel",
+    "camera": "Cam_09_SupervisorKeyResetPanel",
+    "description": "This is an optional add-on to the APD system.  It can be located below the main control panel of the power module."
+  },
+  {
+    "node": "10_HydraulicSystem",
+    "title": "Hydraulic System",
+    "camera": "Cam_10_HydraulicSystem",
+    "description": "This helps control the hydraulic power of the cargo transfer, bridge & platform height, proportional propulsion, steering and braking, and successful load stops."
+  },
+  {
+    "node": "11_ElectricalSystem",
+    "title": "Electrical System",
+    "camera": "Cam_11_ElectricalSystem",
+    "description": "Operates on 24 volts, and supplies power to all components of the cargo loader."
+  },
+  {
+    "node": "12_AircraftProximityDetector",
+    "title": "Aircraft Proximity Detector (ADP)",
+    "camera": "Cam_12_AircraftProximityDetector",
+    "description": "The APD uses a radar system (on the front and sides of the vehicle) to detect the loader's proximity to the plane.  When a threshold is crossed, the APD activates.  Includes components like an E-Stop button, a hand throttle, and APD override switch, and indicator lights."
+  },
+  {
+    "node": "13_DriversConsole",
+    "title": "Driver's Console",
+    "camera": "Cam_13_DriversConsole",
+    "description": "The driver's console includes the operator & driver control panels, acceleration/brake pedals, emergency stop switch, emergency pump switch, horn switch, manual cab lock, and turn signal lever switch."
+  },
+  {
+    "node": "14_DriversPanelControls",
+    "title": "Driver's Panel Controls",
+    "camera": "Cam_14_DriversPanelControls",
+    "description": "Includes several guages and switches, including:\nFuel level indicators, battery level indicators (for electric loaders), power switches, mode switches, and other indicators."
+  },
+  {
+    "node": "15_OperatorsControlPanel",
+    "title": "Operator's Control Panel",
+    "camera": "Cam_15_OperatorsControlPanel",
+    "description": "Includes fault lights, rotation & lift switches, and platform control joysticks."
+  },
+  {
+    "node": "16_ExtensionDeckControlPanel",
+    "title": "Extension Deck Control Panel",
+    "camera": "Cam_16_ExtensionDeckControlPanel",
+    "description": "Allows operator to control the conveys and rear stabilizers.  Warning lights will notify the operator if the convey system is faulty or if the stabilizers are not retracted properly."
+  }
 ]

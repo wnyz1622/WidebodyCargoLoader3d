@@ -322,6 +322,7 @@ canvas {
 .logo {
     height: 32px;
     flex-shrink: 0;
+    user-select: none;
 }
 
 .header-title {

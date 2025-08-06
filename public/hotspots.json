@@ -44,7 +44,7 @@
   {
     "node": "08_MainControlPanel",
     "title": "Main Control Panel (Diesel vs Electric)",
-    "camera": "Cam_08_MainControlPanel",
+    "camera": "Cam_08_MainControlPanel_DieselVsElectric",
     "description": "Includes panel lights, hour meter, fault indicators, a manual override switch, and general system gauges which allow the operator to oversee the general state of the vehicle."
   },
   {

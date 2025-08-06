@@ -110,8 +110,7 @@ class HotspotManager {
         this.camera.position.set(0, 0, 0);
         this.camera.lookAt(0, 0, 0);
         //this.camera.setFocalLength(50);
-        
-        
+
         // Create renderer
         this.renderer = new WebGLRenderer({
             powerPreference: "high-performance",
@@ -239,17 +238,17 @@ class HotspotManager {
 
         // Set orbit boundaries
         this.controls.minDistance = 0.1; // Minimum zoom distance
-        this.controls.maxDistance = 12; // Maximum zoom distance
+        this.controls.maxDistance = 8; // Maximum zoom distance
         this.controls.minPolarAngle = Math.PI / 6; // Minimum vertical angle (30 degrees)
         this.controls.maxPolarAngle = Math.PI / 2; // Maximum vertical angle (120 degrees)
         // this.controls.minAzimuthAngle = -Math.PI; // Allow full 360 rotation
         //this.controls.maxAzimuthAngle = Math.PI;
         this.controls.enablePan = true; // Disable panning to keep focus on the model
-        this.controls.target.y = -2.5; // Keep the orbit target at floor level
+        this.controls.target.y = 0; // Keep the orbit target at floor level
         // Keep target from going below floor
         this.controls.addEventListener('change', () => {
-            if (this.controls.target.y < -2.5) {
-                this.controls.target.y = -2.5;
+            if (this.controls.target.y < -0.5) {
+                this.controls.target.y = -0.5;
             }
         });
         // Track camera/controls changes for hotspot update
@@ -525,22 +524,17 @@ class HotspotManager {
                     let cameraZ = Math.abs(maxDim / Math.tan(fov / 2));
                     // Enforce a comfortable default reset distance (e.g., z=2)
                     const defaultResetDistance = 5; // Between minDistance (0.1) and maxDistance (25)
-                    this.camera.position.set(10, 0, 6);
+                    this.camera.position.set(0, 0, cameraZ * -15);
                     this.camera.lookAt(0, 0, 0);
                     this.camera.updateProjectionMatrix();
-                    this.initialCameraPosition = new THREE.Vector3(10, 0, 6);
+                    this.initialCameraPosition = new THREE.Vector3(0, 0, cameraZ * -15);
                     this.initialCameraTarget = new THREE.Vector3(0, 0, 0);
-                    //help see what camera position is good and set that above 
-                    // this.controls.addEventListener('change', () => {
-                    //     console.log('📸 Camera Position:', this.camera.position);
-                    //     console.log('🎯 Camera Rotation:', this.camera.rotation);
-                    // });
                     // Set orbit controls target to model center (orbit mode)
                     this.controls.target.set(0, 0, 0);
                     this.controls.update();
                     // Create hotspots after model is loaded
                     this.createDefaultHotspots();
-                    
+
                     // In the model loading section, add this after loading the model:
                     this.model.traverse((node) => {
                         if (node.isMesh) {

@@ -437,6 +437,7 @@ canvas {
     cursor: pointer;
     padding: 0;
     user-select: none;
+
 }
 
 /* Image style for all buttons */
@@ -652,6 +653,7 @@ canvas {
     position: fixed;
     right: 24px;
     top: 100px;
+    left: 50%;
     transform: translateY(-50%);
     width: 100px;
     height: 90px;

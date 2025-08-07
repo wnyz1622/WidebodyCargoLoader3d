@@ -351,7 +351,7 @@ class HotspotManager {
             };
 
 
-            const modelPath = 'media/model/CargoLoader_v1.glb';
+            const modelPath = 'media/model/CargoLoader_v2.glb';
             console.log('Loading model from:', modelPath);
 
             // this.loader.load(modelPath, (gltf) => {
@@ -526,10 +526,10 @@ class HotspotManager {
                     // Enforce a comfortable default reset distance (e.g., z=2)
                     const defaultResetDistance = 5; // Between minDistance (0.1) and maxDistance (25)
                     this.camera.position.set(10, 0, 6);
-                    this.camera.lookAt(0, 0, 0);
+                    this.camera.lookAt(0.2, 0, 0);
                     this.camera.updateProjectionMatrix();
                     this.initialCameraPosition = new THREE.Vector3(10, 0, 6);
-                    this.initialCameraTarget = new THREE.Vector3(0, 0, 0);
+                    this.initialCameraTarget = new THREE.Vector3(0.2, 0, 0);
                     //help see what camera position is good and set that above 
                     // this.controls.addEventListener('change', () => {
                     //     console.log('📸 Camera Position:', this.camera.position);

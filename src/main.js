@@ -156,17 +156,17 @@ class HotspotManager {
             directionalLight.position.set(0, 25, 0);
             directionalLight.castShadow = true;
             
-            // Optimized shadow settings
-            directionalLight.shadow.mapSize.width = 1024; // Reduced from 2048
+            // Expanded shadow settings to prevent cropping
+            directionalLight.shadow.mapSize.width = 1024; // Keep optimized size
             directionalLight.shadow.mapSize.height = 1024;
             directionalLight.shadow.radius = 2; // Reduced from 4
             directionalLight.shadow.bias = -0.001;
             directionalLight.shadow.camera.near = 0.5;
-            directionalLight.shadow.camera.far = 50; // Reduced from 100
-            directionalLight.shadow.camera.left = -20; // Reduced area
-            directionalLight.shadow.camera.right = 20;
-            directionalLight.shadow.camera.top = 20;
-            directionalLight.shadow.camera.bottom = -20;
+            directionalLight.shadow.camera.far = 150; // Increased for better coverage
+            directionalLight.shadow.camera.left = -150; // Expanded area to prevent cropping
+            directionalLight.shadow.camera.right = 150;
+            directionalLight.shadow.camera.top = 150;
+            directionalLight.shadow.camera.bottom = -150;
             directionalLight.shadow.normalBias = 0.02;
             this.scene.add(directionalLight);
         }

@@ -215,7 +215,7 @@ class HotspotManager {
         this.composer.addPass(effectPass);
 
         // Add floor disc
-        const floorGeometry = new THREE.CircleGeometry(40, 48);
+        const floorGeometry = new THREE.CircleGeometry(10, 48);
         const floorMaterial = new THREE.MeshStandardMaterial({
             color: 0xbbbbbb,
             transparent: true,
@@ -226,7 +226,7 @@ class HotspotManager {
         });
         const floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.rotation.x = -Math.PI / 2; // Rotate to be horizontal
-        floor.position.y = -8.5; // Position lower below the model
+        floor.position.y = -2.5; // Position lower below the model
         floor.position.z = 0;
         floor.position.x = 0;
         floor.receiveShadow = true;
@@ -244,17 +244,17 @@ class HotspotManager {
 
         // Set orbit boundaries
         this.controls.minDistance = 0.1; // Minimum zoom distance
-        this.controls.maxDistance = 40; // Maximum zoom distance
+        this.controls.maxDistance = 12; // Maximum zoom distance
         this.controls.minPolarAngle = Math.PI / 6; // Minimum vertical angle (30 degrees)
         this.controls.maxPolarAngle = Math.PI; // Maximum vertical angle (120 degrees)
         // this.controls.minAzimuthAngle = -Math.PI; // Allow full 360 rotation
         //this.controls.maxAzimuthAngle = Math.PI;
         this.controls.enablePan = true; // Disable panning to keep focus on the model
-        this.controls.target.y = -8.5; // Keep the orbit target at floor level
+        this.controls.target.y = -2.5; // Keep the orbit target at floor level
         // Keep target from going below floor
         this.controls.addEventListener('change', () => {
-            if (this.controls.target.y < -8.5) {
-                this.controls.target.y = -8.5;
+            if (this.controls.target.y < -2.5) {
+                this.controls.target.y = -2.5;
             }
         });
         // Track camera/controls changes for hotspot update
@@ -356,7 +356,7 @@ class HotspotManager {
             };
 
 
-            const modelPath = 'media/model/B787_v1.glb';
+            const modelPath = 'media/model/CargoLoader_v3_compressed.glb';
             console.log('Loading model from:', modelPath);
 
             // this.loader.load(modelPath, (gltf) => {
@@ -538,11 +538,11 @@ class HotspotManager {
                     let cameraZ = Math.abs(maxDim / Math.tan(fov / 2));
                     // Enforce a comfortable default reset distance (e.g., z=2)
                     const defaultResetDistance = 5; // Between minDistance (0.1) and maxDistance (25)
-                    this.camera.position.set(34.5, 2.5, 23);
-                    this.camera.lookAt(0, 0, 0);
+                    this.camera.position.set(10, 0, 6);
+                    this.camera.lookAt(0.2, 0, 0);
                     this.camera.updateProjectionMatrix();
-                    this.initialCameraPosition = new THREE.Vector3(34.5, 2.5, 23);
-                    this.initialCameraTarget = new THREE.Vector3(0, 0, 0);
+                    this.initialCameraPosition = new THREE.Vector3(10, 0, 6);
+                    this.initialCameraTarget = new THREE.Vector3(0.2, 0, 0);
 
                     //help see what camera position is good and set that above 
                     // this.controls.addEventListener('change', () => {
